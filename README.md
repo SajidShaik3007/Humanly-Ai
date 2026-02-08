@@ -1,4 +1,18 @@
-  <h1>Humanly AI 🤖✍️</h1>
+  <h1>Humanly AI 🤖✍️</h1> 
+  <a href="https://humanlybot2026.lovable.app/" target="_blank" rel="noopener noreferrer">
+  <button style="
+    background-color:#2f8f7a;
+    color:white;
+    padding:10px 18px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+  ">
+    Humanly AI
+  </button>
+</a>
+
 
   <p>
     <strong>Humanly AI</strong> is an AI-powered content generation platform that creates

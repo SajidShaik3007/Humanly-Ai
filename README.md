@@ -1,38 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Humanly AI – README</title>
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.6;
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-      color: #1f2937;
-    }
-    h1, h2, h3 {
-      color: #111827;
-    }
-    code, pre {
-      background: #f3f4f6;
-      padding: 8px;
-      display: block;
-      border-radius: 6px;
-      overflow-x: auto;
-    }
-    ul {
-      margin-left: 20px;
-    }
-    .section {
-      margin-bottom: 30px;
-    }
-  </style>
-</head>
 
-<body>
 
   <h1>Humanly AI 🤖✍️</h1>
 

@@ -1,5 +1,3 @@
-
-
   <h1>Humanly AI 🤖✍️</h1>
 
   <p>
@@ -69,12 +67,13 @@ Frontend Display (Humanly AI)
       <li>Custom UI for content input and output display</li>
     </ul>
 
-    <h3>Backend / Automation</h3>
-    <ul>
-      <li>n8n</li>
-      <li>Webhook-based workflow execution</li>
-      <li>AI-powered automation</li>
-    </ul>
+  <h3>Backend / Automation</h3>
+<ul>
+  <li>n8n (workflow automation)</li>
+  <li>Webhook-based triggers and responses</li>
+  <li>AI-driven automation using agents</li>
+</ul>
+
   </div>
 
   <div class="section">

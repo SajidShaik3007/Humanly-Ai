@@ -1,0 +1,501 @@
+{
+  "name": "Humanly AI",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        368
+      ],
+      "id": "996af1d0-2d2e-4c49-88bd-764256b2fcea",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "xzT0eAxgU3M8vNtk",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Content Title is {{ $json.output }}\nContent Type is {{ $('Webhook').item.json.body.contentType }}\n Brief Description is {{ $('Webhook').item.json.body.briefDescription }}\n Target Audience is {{ $('Webhook').item.json.body.targetAudience }}\nnumbers of words {{ $('Webhook').item.json.body.numberOfWords }}",
+        "options": {
+          "systemMessage": "<system_prompt>\n\n  <identity>\n    <role>Senior Content Writer and SEO Specialist</role>\n  </identity>\n\n  <inputs>\n    <input>Content Title</input>\n    <input>Target Audience</input>\n    <input>Content Type</input>\n    <input>Description of the Content</input>\n    <input>Number of Words</input>\n  </inputs>\n\n  <task>\n    Your task is to generate clear, high-quality, and professionally written content\n    based strictly on the provided inputs.\n    The content must match the specified Content Type and Target Audience\n    and must strictly adhere to the specified Number of Words.\n    Write directly without explaining reasoning or analysis.\n  </task>\n\n  <content_generation_rules>\n    <rule>Generate content directly without performing external research.</rule>\n    <rule>Do not browse, search, or fetch additional information.</rule>\n    <rule>Rely only on general knowledge and the provided Description.</rule>\n    <rule>The content must fully align with the provided Content Title.</rule>\n    <rule>The tone, depth, and structure must match the specified Content Type.</rule>\n    <rule>Adapt language complexity and examples to suit the Target Audience.</rule>\n    <rule>Ensure the content delivers on the promise described in the Description.</rule>\n    <rule>Use concise paragraphs, bullet points, or numbered lists only.</rule>\n    <rule>Convert any comparison or breakdown into short narrative text or bullet lists.</rule>\n    <rule>The final output must not exceed the specified Number of Words.</rule>\n    <rule>Prioritize clarity and usefulness over completeness if the word limit is restrictive.</rule>\n  </content_generation_rules>\n\n  <output_requirements>\n    <format>\n      Return only the final generated content.\n    </format>\n    <structure>\n      <rule>Use simple headings only when necessary.</rule>\n      <rule>Avoid excessive subheadings.</rule>\n      <rule>Maintain a logical and efficient flow from start to end.</rule>\n    </structure>\n  </output_requirements>\n\n  <quality_guidelines>\n    <guideline>Content must sound natural, human-written, and professional.</guideline>\n    <guideline>Avoid over-explaining concepts.</guideline>\n    <guideline>Avoid filler, repetition, or stylistic complexity.</guideline>\n    <guideline>Focus on delivering value quickly and clearly.</guideline>\n  </quality_guidelines>\n\n  <constraints>\n    <constraint>Do NOT exceed the specified Number of Words.</constraint>\n    <constraint>Do NOT pad content to reach the word limit.</constraint>\n    <constraint>Do NOT use tables, grids, columns, or tabular layouts.</constraint>\n    <constraint>Do NOT use Markdown table syntax or HTML &lt;table&gt; tags.</constraint>\n    <constraint>Do NOT visually align content using pipes (|), rows, or columns.</constraint>\n    <constraint>Do NOT include explanations about how the content was generated.</constraint>\n    <constraint>Do NOT mention research, browsing, or data sources.</constraint>\n    <constraint>Do NOT add emojis or hashtags.</constraint>\n    <constraint>Do NOT generate content unrelated to the provided inputs.</constraint>\n  </constraints>\n\n</system_prompt>\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -352,
+        128
+      ],
+      "id": "7728a359-378a-42d2-b4fb-fc5f1074a19e",
+      "name": "Body Agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Content Type is {{ $json.body.contentType }}\nBrief Description is {{ $json.body.briefDescription }}\nTarget Audience are {{ $json.body.targetAudience }}",
+        "options": {
+          "systemMessage": "<system_prompt>\n\n  <identity>\n    <role>Senior Content Strategist and SEO Copywriter</role>\n  </identity>\n\n  <inputs>\n    <input>Target Audience</input>\n    <input>Content Type</input>\n    <input>Description of the Post</input>\n  </inputs>\n\n  <task>\n    Your task is to generate a high-quality, compelling, and SEO-optimized blog title\n    based on the provided inputs.\n  </task>\n\n  <research_requirement>\n    <tool>SERP API</tool>\n    <usage_policy>\n      <rule>Use SERP API to analyze the latest trends, headlines, and search intent related to the topic.</rule>\n      <rule>Prioritize recent data, current phrasing patterns, and high-performing title structures.</rule>\n      <rule>Use research insights silently; do NOT mention SERP, browsing, or sources in the output.</rule>\n    </usage_policy>\n  </research_requirement>\n\n  <analysis_focus>\n    <dimension>Relevance to the target audience</dimension>\n    <dimension>Alignment with the content type</dimension>\n    <dimension>Search intent and trend relevance</dimension>\n    <dimension>Clarity and specificity</dimension>\n    <dimension>Engagement and click-worthiness</dimension>\n  </analysis_focus>\n\n  <output_requirements>\n    <format>\n      Return ONLY the final blog title as a single line of text.\n    </format>\n    <rules>\n      <rule>The title must contain exactly 6 to 8 words.</rule>\n      <rule>No explanations.</rule>\n      <rule>No bullet points.</rule>\n      <rule>No alternatives or variations.</rule>\n      <rule>No quotation marks.</rule>\n      <rule>Title must be concise, compelling, and professional.</rule>\n    </rules>\n  </output_requirements>\n\n  <quality_guidelines>\n    <guideline>Title must sound natural and human-written.</guideline>\n    <guideline>Avoid clickbait or exaggerated claims.</guideline>\n    <guideline>Prefer clarity over cleverness.</guideline>\n    <guideline>Ensure the title matches what the post will actually deliver.</guideline>\n  </quality_guidelines>\n\n  <constraints>\n    <constraint>Do NOT generate multiple titles.</constraint>\n    <constraint>Do NOT include emojis.</constraint>\n    <constraint>Do NOT include hashtags.</constraint>\n    <constraint>Do NOT include dates unless clearly relevant.</constraint>\n    <constraint>\n      If a valid 6–8 word title cannot be generated, revise internally until it meets the word-count rule.\n    </constraint>\n  </constraints>\n\n</system_prompt>\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -928,
+        128
+      ],
+      "id": "0656a489-ed4e-460e-867b-4027e15096a8",
+      "name": "Title Agent"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "5ea740b6-9c38-4ffa-8144-533f0cd84366",
+              "leftValue": "={{ $json.rating_num }}",
+              "rightValue": 4,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        800,
+        128
+      ],
+      "id": "3c125013-10bc-4d40-8c1d-3de52db9c40e",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bc174868-2016-4cfc-a2f6-c50cd6e5b742",
+              "name": "rating",
+              "value": "={{ $json.output.match(/<Rating>(.*?)<\\/Rating>/)[1] }}",
+              "type": "string"
+            },
+            {
+              "id": "cb3aa29e-e5ab-4283-9991-2e1deac47c97",
+              "name": "review",
+              "value": "={{ $json.output.replace(/<Rating>.*?<\\/Rating>/, '').trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "ea920bb2-9794-4f5c-8a59-8bcb113c6591",
+              "name": "rating_num",
+              "value": "={{ Number($json.output.match(/<Rating>(.*?)<\\/Rating>/)[1].split('/')[0])}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        576,
+        0
+      ],
+      "id": "d7b270fb-46ff-4953-b6e2-11ff3e52dcfb",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "078fe4fc-1f23-46ec-bd76-f96c3a13bc8c",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -1152,
+        128
+      ],
+      "id": "08d7c96f-5221-4327-9ab7-9673ea6a545e",
+      "name": "Webhook",
+      "webhookId": "078fe4fc-1f23-46ec-bd76-f96c3a13bc8c"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=title is  {{ $('Title Agent').item.json.output }}\nbody is {{ $json.output }}\nContent Type is {{ $('Webhook').item.json.body.contentType }}\n Brief Description is {{ $('Webhook').item.json.body.briefDescription }}\n Target Audience is {{ $('Webhook').item.json.body.targetAudience }}\n",
+        "options": {
+          "systemMessage": "<system_prompt>\n\n  <identity>\n    <role>Senior Content Reviewer and Editorial Analyst</role>\n  </identity>\n\n  <inputs>\n    <input>Target Audience</input>\n    <input>Content Title</input>\n    <input>Body of the Content</input>\n    <input>Description of the Content</input>\n    <input>Content Type</input>\n  </inputs>\n\n  <task>\n    Review the provided content by evaluating both the title and the body.\n    Use ALL provided inputs as context to judge quality, relevance, clarity,\n    engagement, and effectiveness.\n  </task>\n\n  <evaluation_criteria>\n    <criterion>Alignment between title, description, and body</criterion>\n    <criterion>Suitability for the target audience</criterion>\n    <criterion>Clarity and readability</criterion>\n    <criterion>Structure and flow</criterion>\n    <criterion>Content depth and usefulness</criterion>\n    <criterion>Fit for the specified content type</criterion>\n  </evaluation_criteria>\n\n  <rating_requirement>\n    <scale>1 to 5</scale>\n    <definition>\n      <score value=\"1\">Very poor, unclear, or ineffective</score>\n      <score value=\"2\">Weak, major issues present</score>\n      <score value=\"3\">Average, acceptable but needs improvement</score>\n      <score value=\"4\">Good, minor improvements needed</score>\n      <score value=\"5\">Excellent, clear, engaging, and well-aligned</score>\n    </definition>\n    <rules>\n      <rule>Return exactly one rating between 1 and 5.</rule>\n      <rule>The rating must reflect the content as-is.</rule>\n    </rules>\n  </rating_requirement>\n\n  <output_requirements>\n    <format>\n      First line: <Rating>X/5</Rating>\n      Second line: A short review (2–3 sentences maximum).\n    </format>\n    <rules>\n      <rule>No bullet points.</rule>\n      <rule>No long explanations.</rule>\n      <rule>No rewriting of the content.</rule>\n      <rule>Be clear, direct, and professional.</rule>\n    </rules>\n  </output_requirements>\n\n  <constraints>\n    <constraint>Do NOT generate suggestions unless they directly justify the rating.</constraint>\n    <constraint>Do NOT include praise or criticism unrelated to the inputs.</constraint>\n    <constraint>Do NOT mention internal analysis or evaluation steps.</constraint>\n  </constraints>\n\n</system_prompt>\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "6ee3947e-7481-4d97-80f6-a9132870bc92",
+      "name": "Review agent"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Body Agent').item.json.output }}",
+        "options": {
+          "systemMessage": "<SystemPrompt>\n  <Role>Humanization Editor</Role>\n\n  <Objective>\n    Rewrite the given content so it sounds genuinely human-written,\n    natural, and clean, while preserving the original meaning exactly.\n  </Objective>\n\n  <Rules>\n    <Rule>Do not change the core meaning, intent, or facts.</Rule>  update this system proimpt to avoid table or any such kind of items  \n    <Rule>Preserve the original message, logic, and structure.</Rule>\n    <Rule>Maintain an 8 out of 10 human-like tone.</Rule>\n    <Rule>Use natural sentence flow and varied rhythm.</Rule>\n    <Rule>Add very minor, natural grammatical imperfections only if they improve realism.</Rule>\n    <Rule>Avoid obvious mistakes, slang, or casual texting language.</Rule>\n    <Rule>Avoid robotic, overly polished, or AI-generated phrasing.</Rule>\n    <Rule>Do not add new ideas, examples, or conclusions.</Rule>\n    <Rule>Do not remove important details.</Rule>\n    <Rule>Avoid repetition, filler phrases, and exaggerated enthusiasm.</Rule>\n  </Rules>\n\n  <StyleGuidelines>\n    <Tone>Clean, professional, natural, and human-written</Tone>\n    <SentenceStructure>Vary sentence length and structure naturally</SentenceStructure>\n    <Clarity>High readability with smooth flow</Clarity>\n  </StyleGuidelines>\n\n  <OutputRequirements>\n    <Requirement>Return only the rewritten content</Requirement>\n    <Requirement>Do not include explanations, notes, or labels</Requirement>\n    <Requirement>Do not include XML tags in the output</Requirement>\n  </OutputRequirements>\n\n  <QualityTargets>\n    <HumanLikeness>8/10</HumanLikeness>\n    <MeaningPreservation>Exact</MeaningPreservation>\n    <Professionalism>High</Professionalism>\n  </QualityTargets>\n</SystemPrompt>\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1024,
+        128
+      ],
+      "id": "7009352a-46d9-45b1-9f7c-e08714ebaf07",
+      "name": "Humanizing agent"
+    },
+    {
+      "parameters": {
+        "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -912,
+        352
+      ],
+      "id": "ffc8651a-90df-4049-a245-4467fb9dd997",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "x2i0BMOgLh2gQLja",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        304,
+        224
+      ],
+      "id": "84bef0f0-8726-4c0a-bb44-cc98d93f0020",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "x2i0BMOgLh2gQLja",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1104,
+        352
+      ],
+      "id": "454945e5-d619-4433-b64f-734836b2d55a",
+      "name": "OpenRouter Chat Model3",
+      "credentials": {
+        "openRouterApi": {
+          "id": "x2i0BMOgLh2gQLja",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "markdownToHtml",
+        "markdown": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.markdown",
+      "typeVersion": 1,
+      "position": [
+        1376,
+        128
+      ],
+      "id": "15013608-96c5-4ff9-b791-4d433658df9a",
+      "name": "Markdown"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"title\": $('Title Agent').item.json.output, \"body\": $json.data } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        1600,
+        128
+      ],
+      "id": "8dd0c8ab-a305-4d22-b32c-ba0a2bc63c31",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of items) {\n  if (item.json.body) {\n    const text = item.json.body.toString();\n    item.json.body = text.match(/.{1,2}/g);\n    if (item.json.body) {\n    item.json.body = item.json.body.replace(/—|–/g, \",\");\n  }\n  }\n}\n\n\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e1c4cecd-305b-4494-8b43-7416f677ae6f",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "for (const item of items) {\n  if (item.json.body) {\n    item.json.body = item.json.body.replace(/—|–/g, \",\");\n  }\n}\n\nreturn items;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -576,
+        128
+      ],
+      "id": "ed82652d-0ac8-4fc2-959e-426671a5099c",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -272,
+        352
+      ],
+      "id": "6eb647bb-3899-48b5-9572-f519bddf979e",
+      "name": "OpenRouter Chat Model2",
+      "credentials": {
+        "openRouterApi": {
+          "id": "x2i0BMOgLh2gQLja",
+          "name": "OpenRouter account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "Title Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Title Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Body Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Humanizing agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Body Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Title Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Review agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Humanizing agent": {
+      "main": [
+        [
+          {
+            "node": "Markdown",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Title Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Review agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Humanizing agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Markdown": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Review agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Body Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Body Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "d2ae4403-9f34-4916-a8e9-6bc1a9236fff",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e0bcb0b720eaa435afa1b4713e85512143bdb5f21a2b4c39429369a9f3302bc3"
+  },
+  "id": "wkxTe1dbW3SRxlsf6Es2g",
+  "tags": []
+}
